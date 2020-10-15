@@ -46,7 +46,8 @@ async function run() {
         const finalTagValue = `${tagValue}/${time}.${revision}`
         core.setOutput("final-tag-value", finalTagValue);
         // Get the JSON webhook payload for the event that triggered the workflow
-        // const payload = JSON.stringify(github.context.payload, undefined, 2)
+        const payload = JSON.stringify(github.context.payload, undefined, 2)
+        console.log("Payload " + payload);
         console.log(`Final tag to push: ${finalTagValue}`);
 
         const tagAlreadyExists = !!(
@@ -59,8 +60,9 @@ async function run() {
         }
 
         core.debug(`Pushing new tag to the repo`);
-
-        const octokit = new github.getOctokit(core.getInput("github_token"));
+        const token = core.getInput("github_token");
+        core.debug(`Token ${token}`);
+        const octokit = new github.getOctokit(token);
         await octokit.git.createRef({
             ...context.repo,
             ref: `refs/tags/${finalTagValue}`,
