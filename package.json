@@ -1,0 +1,14 @@
+{
+  "name": "tag-with-date",
+  "version": "1.0.0",
+  "description": "Github Action to push customisable tag with timestamp",
+  "main": "index.js",
+  "repository": "https://github.com/Halyna/tag-with-date.git",
+  "author": "Halyna Rubashko <halyna.rubashko@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}

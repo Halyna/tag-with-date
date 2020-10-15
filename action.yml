@@ -1,0 +1,21 @@
+name: 'Tag With Date'
+description: 'Push customisable tag with timestampe'
+inputs:
+  tag-value:  # id of input
+    description: 'Value of the tag to push'
+    required: true
+    default: 'v'
+  revision-number:  # id of input
+    description: 'Value of the tag to push'
+    required: true
+    default: '1'
+  date-format:  # id of input
+    description: 'Value of the tag to push'
+    required: false
+    default: 'YYMMdd'
+outputs:
+  final-tag-value: # id of output
+    description: 'Tag to be pushed to repo'
+runs:
+  using: 'node12'
+  main: 'index.js'
