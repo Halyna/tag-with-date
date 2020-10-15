@@ -60,7 +60,7 @@ async function run() {
 
         core.debug(`Pushing new tag to the repo`);
 
-        const octokit = new GitHub(core.getInput("github_token"));
+        const octokit = new github.getOctokit(core.getInput("github_token"));
         await octokit.git.createRef({
             ...context.repo,
             ref: `refs/tags/${finalTagValue}`,
