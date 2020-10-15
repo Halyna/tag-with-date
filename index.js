@@ -50,7 +50,7 @@ async function run() {
         console.log(`Final tag to push: ${finalTagValue}`);
 
         const tagAlreadyExists = !!(
-            await exec(`git tag -l "${newTag}"`)
+            await exec(`git tag -l "${finalTagValue}"`)
         ).stdout.trim();
 
         if (tagAlreadyExists) {
