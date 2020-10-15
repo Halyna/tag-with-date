@@ -20,7 +20,7 @@ Final value of the tag pushed.
 
 ## Example usage
 
-uses: halyna/hello-world-javascript-action@v1
+uses: halyna/tag-with-date@v1
 with:
   tag-value: 'project/app/environment'
   revision-number: '1'

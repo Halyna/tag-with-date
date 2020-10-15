@@ -36,36 +36,40 @@ async function exec(command) {
 }
 
 
-try {
-    // `who-to-greet` input defined in action metadata file
-    const tagValue = core.getInput('tag-value');
-    const revision = core.getInput('revision-number');
-    console.log(`Base tag ${tagValue}`);
-    const time = (new Date()).toISOString().slice(0,10).replace(/-/g,"");
-    const finalTagValue = `${tagValue}/${time}.${revision}`
-    core.setOutput("final-tag-value", finalTagValue);
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+async function run() {
+    try {
+        // `who-to-greet` input defined in action metadata file
+        const tagValue = core.getInput('tag-value');
+        const revision = core.getInput('revision-number');
+        console.log(`Base tag ${tagValue}`);
+        const time = (new Date()).toISOString().slice(0, 10).replace(/-/g, "");
+        const finalTagValue = `${tagValue}/${time}.${revision}`
+        core.setOutput("final-tag-value", finalTagValue);
+        // Get the JSON webhook payload for the event that triggered the workflow
+        const payload = JSON.stringify(github.context.payload, undefined, 2)
+        console.log(`The event payload: ${payload}`);
 
-    const tagAlreadyExists = !!(
-        await exec(`git tag -l "${newTag}"`)
-    ).stdout.trim();
+        const tagAlreadyExists = !!(
+            await exec(`git tag -l "${newTag}"`)
+        ).stdout.trim();
 
-    if (tagAlreadyExists) {
-        core.debug("This tag already exists. Skipping the tag creation.");
-        return;
+        if (tagAlreadyExists) {
+            core.debug("This tag already exists. Skipping the tag creation.");
+            return;
+        }
+
+        core.debug(`Pushing new tag to the repo`);
+
+        const octokit = new GitHub(core.getInput("github_token"));
+        await octokit.git.createRef({
+            ...context.repo,
+            ref: `refs/tags/${newTag}`,
+            sha: GITHUB_SHA,
+        });
+
+    } catch (error) {
+        core.setFailed(error.message);
     }
-
-    core.debug(`Pushing new tag to the repo`);
-
-    const octokit = new GitHub(core.getInput("github_token"));
-    await octokit.git.createRef({
-        ...context.repo,
-        ref: `refs/tags/${newTag}`,
-        sha: GITHUB_SHA,
-    });
-
-} catch (error) {
-    core.setFailed(error.message);
 }
+
+run();
