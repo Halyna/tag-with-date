@@ -60,7 +60,7 @@ async function run() {
         }
 
         core.debug(`Pushing new tag to the repo`);
-        const token = core.getInput("github_token");
+        const token = process.env.GITHUB_TOKEN || '';
         core.debug(`Token ${token}`);
         const octokit = new github.getOctokit(token);
         await octokit.git.createRef({
