@@ -49,6 +49,7 @@ async function run() {
         const payload = JSON.stringify(github.context.payload, undefined, 2)
         console.log("Payload " + payload);
         console.log(`Final tag to push: ${finalTagValue}`);
+        console.log(`Why is everything broken`);
 
         // const tagAlreadyExists = !!(
         //     await exec(`git tag -l "${finalTagValue}"`)
