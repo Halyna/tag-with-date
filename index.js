@@ -63,20 +63,22 @@ async function run() {
         console.log(`Getting vars`);
         const token = core.getInput('github_token');
         const sha = process.env.GITHUB_SHA || '';
-        const repo = github.context.repo;
+        const owner = github.context.repo.owner;
+        const repo = github.context.repo.repo;
         console.log(`Token ${token}`);
         console.log(`Repo ${JSON.stringify(repo)}`);
 
         console.log(`Creating octokit`);
         const octokit = github.getOctokit(token);
 
-        console.log(`Getting existing tag`);
+        // console.log(`Getting existing tag`);
         // const tag = await octokit.git.getTag({repo, finalTagValue});
         //
         // console.log(`Existing tag ${tag}`);
 
         console.log(`Pushing new tag to the repo`);
         await octokit.git.createRef({
+            owner,
             repo,
             ref: `refs/tags/${finalTagValue}`,
             sha: sha,
