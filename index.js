@@ -60,22 +60,22 @@ async function run() {
         //     return;
         // }
 
-        core.debug(`Getting vars`);
+        console.log(`Getting vars`);
         const token = process.env.GITHUB_TOKEN || '';
         const sha = process.env.GITHUB_SHA || '';
         const repo = github.context.repo;
-        core.debug(`Token ${token}`);
-        core.debug(`Repo ${repo}`);
+        console.log(`Token ${token}`);
+        console.log(`Repo ${repo}`);
 
-        core.debug(`Creating octokit`);
+        console.log(`Creating octokit`);
         const octokit = new github.getOctokit(token);
 
-        core.debug(`Getting existing tag`);
+        console.log(`Getting existing tag`);
         const tag = await octokit.git.getTag({repo, finalTagValue});
 
-        core.debug(`Existing tag ${tag}`);
+        console.log(`Existing tag ${tag}`);
 
-        core.debug(`Pushing new tag to the repo`);
+        console.log(`Pushing new tag to the repo`);
         await octokit.git.createRef({
             ...context.repo,
             ref: `refs/tags/${finalTagValue}`,
