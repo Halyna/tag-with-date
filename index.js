@@ -61,11 +61,13 @@ async function run() {
         // }
 
         console.log(`Getting vars`);
-        const token = process.env.GITHUB_TOKEN || '';
+        const token = core.getInput('repo-token');
+        const token2 = core.getInput('github_token');
         const sha = process.env.GITHUB_SHA || '';
         const repo = github.context.repo;
         console.log(`Token ${token}`);
-        console.log(`Repo ${repo}`);
+        console.log(`Token ${token2}`);
+        console.log(`Repo ${JSON.stringify(repo)}`);
 
         console.log(`Creating octokit`);
         const octokit = new github.getOctokit(token);
