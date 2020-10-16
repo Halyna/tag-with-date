@@ -71,9 +71,9 @@ async function run() {
         const octokit = github.getOctokit(token);
 
         console.log(`Getting existing tag`);
-        const tag = await octokit.git.getTag({repo, finalTagValue});
-
-        console.log(`Existing tag ${tag}`);
+        // const tag = await octokit.git.getTag({repo, finalTagValue});
+        //
+        // console.log(`Existing tag ${tag}`);
 
         console.log(`Pushing new tag to the repo`);
         await octokit.git.createRef({
