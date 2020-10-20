@@ -20,7 +20,9 @@ Final value of the tag pushed.
 
 ## Example usage
 
-uses: halyna/tag-with-date@v1
-with:
-  tag-value: 'project/app/environment'
-  revision-number: '1'
+`- name: Push tag
+      uses: halyna/tag-with-date@v2
+      with:
+        tag-value: 'wh/api/staging'
+        revision-number: ${{ github.event.inputs.revision-number }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}`

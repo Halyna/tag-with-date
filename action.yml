@@ -6,13 +6,9 @@ inputs:
     required: true
     default: 'v'
   revision-number:  # id of input
-    description: 'Value of the tag to push'
+    description: 'Revision number to differentiate between multiple deployments within same date'
     required: true
     default: '1'
-  date-format:  # id of input
-    description: 'Value of the tag to push'
-    required: false
-    default: 'YYMMdd'
 outputs:
   final-tag-value: # id of output
     description: 'Tag to be pushed to repo'
