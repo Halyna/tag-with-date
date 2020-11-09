@@ -14,12 +14,10 @@ async function run() {
         if (!token) {
             token = "token"
         }
-        console.log(`Token ${token}`)
         const sha = process.env.GITHUB_SHA || ''
         let owner
         let repo
         if (!process.env.GITHUB_REPOSITORY) {
-            console.log("empty")
             owner = 'mightykingdom'
             repo = 'MKNetV2'
         } else {
@@ -27,23 +25,38 @@ async function run() {
             repo = github.context.repo.repo
         }
 
-        console.log(`Repo ${JSON.stringify(repo)}`)
+        const octokit = github.getOctokit(token, auto_traversal = true)
 
-        console.log(`Creating octokit`)
-        const octokit = github.getOctokit(token)
-
-
-        var existingTags = await octokit.repos.listTags({
+        let page = 1
+        console.log(`Fetching existing tags`)
+        let fetchResult = await octokit.repos.listTags({
             owner,
             repo,
-            per_page: 100
+            per_page: 100,
+            page: page
         });
 
-        let filtered = existingTags.data.filter(item => item.name === finalTagValue)
+        let existingTags = fetchResult.data
+        let link = fetchResult.headers.link
+        while (link.includes('rel="next"')) {
+            page += 1
+            console.log(`Fetching existing tags page ${page}`)
+            fetchResult = await octokit.repos.listTags({
+                owner,
+                repo,
+                per_page: 100,
+                page: page
+            })
+            link = fetchResult.headers.link
+            existingTags = existingTags.concat(fetchResult.data)
+        }
+
+        console.log(`Found ${existingTags.length} existing tags`)
+        let filtered = existingTags.filter(item => item.name == finalTagValue)
         while (filtered.length > 0) {
             revision += 1
             finalTagValue = `${tagValue}/${time}.${revision}`
-            filtered = existingTags.data.filter(item => item.name === finalTagValue)
+            filtered = existingTags.filter(item => item.name == finalTagValue)
         }
 
         console.log(`Final tag to push: ${finalTagValue}`)
@@ -56,6 +69,7 @@ async function run() {
             ref: `refs/tags/${finalTagValue}`,
             sha: sha,
         })
+
     } catch (error) {
         core.setFailed(error.message)
     }
