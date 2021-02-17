@@ -38,7 +38,7 @@ async function run() {
 
         let existingTags = fetchResult.data
         let link = fetchResult.headers.link
-        while (link.includes('rel="next"')) {
+        while (link && link.includes('rel="next"')) {
             page += 1
             console.log(`Fetching existing tags page ${page}`)
             fetchResult = await octokit.repos.listTags({

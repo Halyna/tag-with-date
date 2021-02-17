@@ -7,7 +7,7 @@ inputs:
     default: 'v'
   revision-number:  # id of input
     description: 'Revision number to differentiate between multiple deployments within same date'
-    required: true
+    required: false
     default: '1'
 outputs:
   final-tag-value: # id of output
